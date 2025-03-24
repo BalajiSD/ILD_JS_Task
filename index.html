@@ -1,0 +1,531 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Task Management Application</title>
+    <link rel="stylesheet" href="Style.css" />
+    <style>
+        
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Poppins', sans-serif;
+    background-color: #f4f4f9;
+    color: #333;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    flex-direction: column;
+}
+
+header {
+    text-align: center;
+    margin-bottom: 40px;
+}
+
+h2 {
+    font-size: 2rem;
+    color: #4285F4;
+}
+
+.MainContainer {
+    width: 100%;
+    max-width: 800px;
+    background-color: white;
+    padding: 20px;
+    border-radius: 12px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.nav__lists {
+    display: flex;
+    justify-content: space-around;
+    margin-bottom: 20px;
+}
+
+.nav__link {
+    background-color: #4285F4;
+    color: white;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.nav__link:hover {
+    background-color: #3367D6;
+}
+
+.task-form {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 20px;
+    background-color: #fff;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.task-input {
+    width: 100%;
+    padding: 10px;
+    font-size: 1rem;
+    margin-bottom: 15px;
+    border: 2px solid #ccc;
+    border-radius: 5px;
+    box-sizing: border-box;
+    transition: border-color 0.3s;
+}
+
+.task-input:focus {
+    border-color: #4285F4;
+}
+
+.add-task-button {
+    background-color: #4285F4;
+    color: white;
+    padding: 12px 25px;
+    font-size: 1rem;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.add-task-button:hover {
+    background-color: #3367D6;
+}
+
+
+.task-display {
+    margin-top: 30px;
+}
+
+.task-list {
+    list-style-type: none;
+    padding: 0;
+}
+
+.task-item {
+    display: flex;
+    justify-self: center;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ddd;
+    margin: 5px 0;
+    border-radius: 5px;
+    background-color: white;
+}
+
+.task-checkbox {
+    margin-right: 10px;
+}
+
+.task-item:hover {
+    background-color: #f1f1f1;
+}
+
+.task-text {
+    flex-grow: 1;
+    font-weight: bold;
+}
+.edit-button {
+    background-color: #4285F4;
+    color: white;
+    padding: 6px 12px;
+    font-size: 0.9rem;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.edit-button:hover {
+    background-color: #3367D6;
+}
+
+
+.edit-form {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 30px;
+    background-color: #fff;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    margin-top: 20px;
+}
+
+.edit-input {
+    width: 100%;
+    padding: 12px;
+    font-size: 1rem;
+    margin-bottom: 15px;
+    border: 2px solid #ccc;
+    border-radius: 5px;
+    box-sizing: border-box;
+    transition: border-color 0.3s;
+}
+
+.edit-input:focus {
+    border-color: #4285F4;
+}
+
+.submit-button {
+    background-color: green;
+    color: white;
+    padding: 12px 25px;
+    font-size: 1rem;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.submit-button:hover {
+    background-color: darkgreen;
+}
+
+
+.task-display p {
+    text-align: center;
+    font-size: 1.2rem;
+    color: #999;
+}
+.delete-button {
+    background-color: red;
+    color: white;
+    border: none;
+    padding: 5px 10px;
+    cursor: pointer;
+    border-radius: 3px;
+}
+
+.delete-button:hover {
+    background-color: darkred;
+}
+
+
+@media screen and (max-width: 768px) {
+    .MainContainer {
+        padding: 15px;
+    }
+
+    .task-form {
+        width: 100%;
+    }
+
+    .task-input, .add-task-button, .submit-button {
+        width: 100%;
+    }
+
+    .task-item {
+        font-size: 0.9rem;
+        padding: 10px;
+    }
+}
+    </style>
+  </head>
+  <body>
+    <header>
+      <h2>Welcome to my Task Management Application</h2>
+    </header>
+
+    <div class="MainContainer">
+      <div class="nav__lists">
+        <button
+          type="button"
+          onclick="showAddTaskForm()"
+          class="nav__link active-link"
+        >
+          Add
+        </button>
+        <button
+          type="button"
+          onclick="showEditText()"
+          class="nav__link active-link"
+        >
+          Edit
+        </button>
+        <button
+          type="button"
+          onclick="showViewTask()"
+          class="nav__link active-link"
+        >
+          View Task
+        </button>
+        
+      </div>
+
+      <div class="ContainerToView"></div>
+    </div>
+
+    <footer></footer>
+
+    <script>
+      function getTasks() {
+        const tasks = JSON.parse(localStorage.getItem('tasks')) || [];
+        return tasks;
+      }
+
+      function saveTasks(tasks) {
+        localStorage.setItem('tasks', JSON.stringify(tasks));
+      }
+
+      function showAddTaskForm() {
+        const container = document.querySelector(".ContainerToView");
+        container.innerHTML = "";
+
+        const newDiv = document.createElement("div");
+        newDiv.classList.add("task-form");
+
+        const inputField = document.createElement("input");
+        inputField.type = "text";
+        inputField.placeholder = "Enter your task here";
+        inputField.classList.add("task-input");
+
+        const addButton = document.createElement("button");
+        addButton.textContent = "Add Task";
+        addButton.classList.add("add-task-button");
+
+        const taskList = document.createElement("ul");
+        taskList.classList.add("task-list");
+
+        newDiv.appendChild(inputField);
+        newDiv.appendChild(addButton);
+        newDiv.appendChild(taskList);
+
+        container.appendChild(newDiv);
+
+        displayTasks(taskList);
+
+        addButton.addEventListener("click", function () {
+          const taskText = inputField.value.trim();
+
+          if (taskText !== "") {
+            const tasks = getTasks();
+            const task = {
+              text: taskText,
+              isCompleted: false,
+            };
+
+            tasks.push(task);
+            saveTasks(tasks);
+
+            inputField.value = "";
+            displayTasks(taskList);
+          } else {
+            alert("Please enter a task before adding.");
+          }
+        });
+      }
+
+      function displayTasks(taskList) {
+        taskList.innerHTML = '';
+    
+        const tasks = getTasks();
+        
+        if (tasks.length === 0) {
+            taskList.style.display = "none"; 
+            return;
+        } else {
+            taskList.style.display = "block";
+        }
+    
+        tasks.forEach((task, index) => {
+            const taskItem = document.createElement("li");
+            taskItem.classList.add("task-item");
+  
+            const checkBox = document.createElement("input");
+            checkBox.type = "checkbox";
+            checkBox.classList.add("task-checkbox");
+    
+            const taskText = document.createElement("span");
+            taskText.textContent = task.text;
+            taskText.classList.add("task-text");
+    
+            const deleteButton = document.createElement("button");
+            deleteButton.textContent = "Delete";
+            deleteButton.classList.add("delete-button");
+    
+            taskItem.appendChild(checkBox);
+            taskItem.appendChild(taskText);
+            taskItem.appendChild(deleteButton);
+    
+            taskList.appendChild(taskItem);
+    
+            if (task.isCompleted) {
+                checkBox.checked = true;
+                taskItem.style.backgroundColor = "#D4EDDA";
+            }
+    
+            checkBox.addEventListener("change", function () {
+                task.isCompleted = checkBox.checked;
+                saveTasks(tasks);
+                displayTasks(taskList);
+            });
+    
+            deleteButton.addEventListener("click", function () {
+                const updatedTasks = tasks.filter((_, idx) => idx !== index);
+                saveTasks(updatedTasks);
+                displayTasks(taskList);
+            });
+        });
+      }
+
+      function showEditText() {
+        const container = document.querySelector(".ContainerToView");
+        container.innerHTML = ""; 
+
+        const taskDisplayDiv = document.createElement("div");
+        taskDisplayDiv.classList.add("task-display");
+
+        const taskList = document.createElement("ul");
+        taskList.classList.add("task-list");
+
+        const tasks = getTasks();
+        tasks.forEach((task, index) => {
+          const taskItem = document.createElement("li");
+          taskItem.classList.add("task-item");
+
+          const taskText = document.createElement("span");
+          taskText.textContent = task.text;
+          taskText.classList.add("task-text");
+
+          const editButton = document.createElement("button");
+          editButton.textContent = "Edit";
+          editButton.classList.add("edit-button");
+
+          const deleteButton = document.createElement("button");
+          deleteButton.textContent = "Delete";
+          deleteButton.classList.add("delete-button");
+
+          taskItem.appendChild(taskText);
+          taskItem.appendChild(editButton);
+          taskItem.appendChild(deleteButton);
+          taskList.appendChild(taskItem);
+
+          editButton.addEventListener("click", () => {
+            showTaskEditForm(index, taskText);
+          });
+
+          deleteButton.addEventListener("click", () => {
+            const updatedTasks = tasks.filter((t, idx) => idx !== index);
+            saveTasks(updatedTasks);
+            showEditText();
+          });
+        });
+
+        taskDisplayDiv.appendChild(taskList);
+        container.appendChild(taskDisplayDiv);
+      }
+
+      function showTaskEditForm(taskIndex, currentText) {
+        const container = document.querySelector(".ContainerToView");
+        container.innerHTML = "";
+
+        const editFormDiv = document.createElement("div");
+        editFormDiv.classList.add("edit-form");
+
+        const inputField = document.createElement("input");
+        inputField.type = "text";
+        inputField.value = currentText.textContent;
+        inputField.classList.add("edit-input");
+
+        const submitButton = document.createElement("button");
+        submitButton.textContent = "Submit";
+        submitButton.classList.add("submit-button");
+
+        editFormDiv.appendChild(inputField);
+        editFormDiv.appendChild(submitButton);
+
+        container.appendChild(editFormDiv);
+
+        submitButton.addEventListener("click", () => {
+          const updatedText = inputField.value.trim();
+          if (updatedText !== "") {
+            const tasks = getTasks();
+            tasks[taskIndex].text = updatedText;
+            saveTasks(tasks);
+            showEditText();
+          } else {
+            alert("Task text cannot be empty.");
+          }
+        });
+      }
+
+      function showViewTask() {
+        const container = document.querySelector(".ContainerToView");
+        container.innerHTML = "";
+
+        const taskDisplayDiv = document.createElement("div");
+        taskDisplayDiv.classList.add("task-display");
+
+        const taskList = document.createElement("ul");
+        taskList.classList.add("task-list");
+
+        const filterSelect = document.createElement("select");
+        filterSelect.classList.add("filter-status");
+        const allOption = document.createElement("option");
+        allOption.value = "all";
+        allOption.textContent = "All Tasks";
+        const completedOption = document.createElement("option");
+        completedOption.value = "completed";
+        completedOption.textContent = "Completed";
+        const pendingOption = document.createElement("option");
+        pendingOption.value = "pending";
+        pendingOption.textContent = "Pending";
+
+        filterSelect.appendChild(allOption);
+        filterSelect.appendChild(completedOption);
+        filterSelect.appendChild(pendingOption);
+
+        taskDisplayDiv.appendChild(filterSelect);
+
+        filterSelect.addEventListener("change", (e) => {
+          const filterValue = e.target.value;
+          const tasks = getTasks();
+          taskList.innerHTML = "";
+
+          let filteredTasks;
+          if (filterValue === "completed") {
+            filteredTasks = tasks.filter(task => task.isCompleted);
+          } else if (filterValue === "pending") {
+            filteredTasks = tasks.filter(task => !task.isCompleted);
+          } else {
+            filteredTasks = tasks;
+          }
+
+          filteredTasks.forEach((task, index) => {
+            const taskItem = document.createElement("li");
+            taskItem.classList.add("task-item");
+
+            const taskText = document.createElement("span");
+            taskText.textContent = task.text;
+            taskText.classList.add("task-text");
+
+            taskItem.appendChild(taskText);
+            taskList.appendChild(taskItem);
+          });
+        });
+
+        taskDisplayDiv.appendChild(taskList);
+        container.appendChild(taskDisplayDiv);
+      }
+
+      document.addEventListener("DOMContentLoaded", function () {
+        showAddTaskForm(); 
+      });
+    </script>
+  </body>
+</html>
